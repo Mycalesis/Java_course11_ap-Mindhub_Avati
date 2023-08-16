@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 public class ClientDTO {
 
+    private Set<CardDTO> cards;
     private long id;
     private String firstName;
     private String lastName;
@@ -27,6 +28,9 @@ public class ClientDTO {
                 .collect(Collectors.toSet());
         this.clientLoans = client.getClientLoans().stream()
                 .map(clientLoan -> new ClientLoanDTO(clientLoan))
+                .collect(Collectors.toSet());
+        this.cards = client.getCards().stream()
+                .map(card -> new CardDTO(card))
                 .collect(Collectors.toSet());
     }
 
@@ -72,5 +76,13 @@ public class ClientDTO {
 
     public void setClientLoans(Set<ClientLoanDTO> clientLoans) {
         this.clientLoans = clientLoans;
+    }
+
+    public Set<CardDTO> getCards() {
+        return cards;
+    }
+
+    public void setCards(Set<CardDTO> cards) {
+        this.cards = cards;
     }
 }

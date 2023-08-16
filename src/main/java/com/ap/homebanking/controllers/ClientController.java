@@ -3,6 +3,7 @@ package com.ap.homebanking.controllers;
 import com.ap.homebanking.dtos.ClientDTO;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.models.ClientLoan;
+import com.ap.homebanking.repositories.CardRepository;
 import com.ap.homebanking.repositories.ClientRepository;
 import com.ap.homebanking.repositories.ClientLoanRepository;
 
@@ -23,9 +24,12 @@ public class ClientController {
     private final ClientRepository clientRepository;
     private final ClientLoanRepository clientLoanRepository;
 
-    public ClientController(ClientRepository clientRepository, ClientLoanRepository clientLoanRepository) {
+    private final CardRepository cardRepository;
+
+    public ClientController(ClientRepository clientRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository) {
         this.clientRepository = clientRepository;
         this.clientLoanRepository = clientLoanRepository;
+        this.cardRepository = cardRepository;
     }
 
     @GetMapping("/clients")

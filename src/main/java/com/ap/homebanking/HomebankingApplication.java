@@ -23,7 +23,7 @@ public class HomebankingApplication {
 			AccountRepository accountRepository,
 			TransactionRepository transactionRepository,
 			LoanRepository loanRepository,
-			ClientLoanRepository clientLoanRepository) {
+			ClientLoanRepository clientLoanRepository, CardRepository cardRepository) {
 		return args -> {
 
 			Client melba = new Client("Melba", "Morel", "melba@minhub.com");
@@ -111,6 +111,20 @@ public class HomebankingApplication {
 			ClientLoan clientLoan04 = new ClientLoan(loan3, "Vehicle", 36, 200000, anotherClient);
 			clientLoanRepository.save(clientLoan04);
 
+			//cards
+			//Melba
+			Card card01 = new Card(TransactionType.DEBIT, "Melba Morel",Color.GOLD, "2223-4582-2233-9154", 225,LocalDate.now(),LocalDate.ofYearDay(28,10) );
+			melba.addCard(card01);
+			cardRepository.save(card01);
+			Card card02 = new Card(TransactionType.CREDIT, "Melba Morel",Color.TITANIUM, "7273-4782-2273-9754", 275,LocalDate.now(),LocalDate.ofYearDay(28,10) );
+			melba.addCard(card02);
+			cardRepository.save(card02);
+
+			//Merengada
+
+			Card card03 = new Card(TransactionType.DEBIT, "Merengada Vainilla",Color.SILVER, "9823-4562-2233-9855", 655,LocalDate.now(),LocalDate.ofYearDay(28,10) );
+			anotherClient.addCard(card03);
+			cardRepository.save(card03);
 	};
 }
 		}

@@ -1,4 +1,6 @@
 package com.ap.homebanking.models;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -6,8 +8,8 @@ import java.time.LocalDate;
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY )
-
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
     private long amount;
