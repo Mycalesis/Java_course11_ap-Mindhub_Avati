@@ -10,6 +10,7 @@ import java.util.Set;
 @Entity
 public class Client {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @GenericGenerator(name = "native", strategy = "native")
@@ -17,6 +18,10 @@ public class Client {
     private String firstName;
     private String lastName;
     private String email;
+
+    private String password;
+
+    private Rol rol;
 
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<Account> accounts = new HashSet<>();
@@ -31,10 +36,12 @@ public class Client {
 
     }
 
-    public Client(String firstName, String lastName, String email) {
+    public Client(String firstName, String lastName, String email, String password, Rol rol) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password = password;
+        this.rol = rol;
     }
 
     public long getId() {
@@ -63,6 +70,22 @@ public class Client {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
     }
 
     public Set<Account> getAccounts() {

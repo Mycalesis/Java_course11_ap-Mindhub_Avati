@@ -9,5 +9,7 @@ import java.util.List;
 @RepositoryRestResource
 
 public interface ClientRepository extends JpaRepository <Client, Long> {
+    //debe ser unico porque es el usuario que inicia sesion
+    Client findByEmail(String email);
 
 }

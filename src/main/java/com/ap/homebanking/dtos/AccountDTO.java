@@ -34,33 +34,24 @@ public class AccountDTO {
         return accountNumber;
     }
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
+    //public void setAccountNumber(String accountNumber) {this.accountNumber = accountNumber;}
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public int getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
-        this.balance = balance;
-    }
+    //public void setBalance(int balance) {this.balance = balance;}
 
     public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
-        this.creationDate = creationDate;
-    }
+    //public void setCreationDate(LocalDate creationDate) {this.creationDate = creationDate;}
 
     public List<TransactionDTO> getTransactions() {
         return transactions;

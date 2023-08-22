@@ -2,6 +2,7 @@ package com.ap.homebanking.dtos;
 
 import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
+import com.ap.homebanking.models.Rol;
 
 import java.util.List;
 import java.util.Set;
@@ -14,6 +15,9 @@ public class ClientDTO {
     private String firstName;
     private String lastName;
     private String email;
+
+    private Rol rol;
+    private String password;
     private Set<AccountDTO> accounts;
 
     private Set<ClientLoanDTO> clientLoans;
@@ -23,6 +27,8 @@ public class ClientDTO {
         this.firstName = client.getFirstName();
         this.lastName = client.getLastName();
         this.email = client.getEmail();
+        this.password = client.getPassword();
+        this.rol = client.getRol();
         this.accounts = client.getAccounts().stream()
                 .map(account -> new AccountDTO(account))
                 .collect(Collectors.toSet());
@@ -62,27 +68,39 @@ public class ClientDTO {
         return email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public long getId() {
         return id;
     }
 
-    public Set<AccountDTO> getAccounts() {
-        return accounts;
-    }
+//    public Set<AccountDTO> getAccounts() {
+//        return accounts;
+//    }
 
-    public Set<ClientLoanDTO> getClientLoans() {
-        return clientLoans;
-    }
+//    public Set<ClientLoanDTO> getClientLoans() {
+//        return clientLoans;
+//    }
 
-    public void setClientLoans(Set<ClientLoanDTO> clientLoans) {
-        this.clientLoans = clientLoans;
-    }
+//    public void setClientLoans(Set<ClientLoanDTO> clientLoans) {
+//        this.clientLoans = clientLoans;
+//    }
 
-    public Set<CardDTO> getCards() {
-        return cards;
-    }
+//    public Set<CardDTO> getCards() {
+//        return cards;
+//    }
 
-    public void setCards(Set<CardDTO> cards) {
-        this.cards = cards;
-    }
+//    public void setCards(Set<CardDTO> cards) {
+//        this.cards = cards;
+//    }
 }

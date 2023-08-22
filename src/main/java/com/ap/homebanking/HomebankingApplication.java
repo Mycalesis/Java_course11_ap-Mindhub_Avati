@@ -2,10 +2,12 @@ package com.ap.homebanking;
 
 import com.ap.homebanking.models.*;
 import com.ap.homebanking.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,6 +18,9 @@ public class HomebankingApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 
 	@Bean
 	public ApplicationRunner initData(
@@ -23,10 +28,13 @@ public class HomebankingApplication {
 			AccountRepository accountRepository,
 			TransactionRepository transactionRepository,
 			LoanRepository loanRepository,
-			ClientLoanRepository clientLoanRepository, CardRepository cardRepository) {
+			ClientLoanRepository clientLoanRepository, CardRepository cardRepository
+			//, PasswordEncoder passwordEncoder
+			) {
 		return args -> {
 
-			Client melba = new Client("Melba", "Morel", "melba@minhub.com");
+			///MELBA MOREL
+			Client melba = new Client("Melba", "Morel", "melba@minhub.com",passwordEncoder.encode("melba123"), Rol.CLIENT);
 			clientRepository.save(melba);
 
 			LocalDate today = LocalDate.now();
@@ -37,15 +45,8 @@ public class HomebankingApplication {
 			accountRepository.save(account1);
 			accountRepository.save(account2);
 
-			Client anotherClient = new Client("Merengada", "Vainilla", "Mere.Vai@example.com");
-			clientRepository.save(anotherClient);
 
-			Account anotherAccount1 = new Account("VIN003", 10000, anotherClient, LocalDate.now());
-			Account anotherAccount2 = new Account("VIN004", 20000, anotherClient,LocalDate.now());
-			accountRepository.save(anotherAccount1);
-			accountRepository.save(anotherAccount2);
-
-			//Transacciones
+			///MELBA'S TRANSACTIONS
 
 			Transaction transaction1 = new Transaction(-2000, "Compra en farmacia null", LocalDate.now(), TransactionType.DEBIT);
 			account1.addTransaction(transaction1);
@@ -69,6 +70,53 @@ public class HomebankingApplication {
 			transactionRepository.save(transaction5);
 
 
+			//***** lOANS *******///
+
+			// Data Loans
+			Loan loan1 = new Loan("Hipotecary", 500000, List.of(12, 24, 36, 48, 60));
+			loanRepository.save(loan1);
+
+			Loan loan2 = new Loan("Personal", 100000, List.of(6, 12, 24));
+			loanRepository.save(loan2);
+
+			Loan loan3 = new Loan("Vehicle", 300000, List.of(6, 12, 24, 36));
+			loanRepository.save(loan3);
+
+
+			///MELBA'S LOANS
+
+			ClientLoan clientLoan01 = new ClientLoan(loan1, "Hipotecary", 60, 400000, melba);
+			clientLoanRepository.save(clientLoan01);
+
+			ClientLoan clientLoan02 = new ClientLoan(loan2, "Personal", 12, 50000, melba);
+			clientLoanRepository.save(clientLoan02);
+
+
+			//cards
+			//Melba
+			Card card01 = new Card(TransactionType.DEBIT, "Melba Morel",Color.GOLD, "2223-4582-2233-9154", 225,LocalDate.now(),LocalDate.ofYearDay(28,10) );
+			melba.addCard(card01);
+			cardRepository.save(card01);
+			Card card02 = new Card(TransactionType.CREDIT, "Melba Morel",Color.TITANIUM, "7273-4782-2273-9754", 275,LocalDate.now(),LocalDate.ofYearDay(28,10) );
+			melba.addCard(card02);
+			cardRepository.save(card02);
+
+
+			////*******************************************************************************///////
+
+
+			///MERENGADA VAINILLA
+
+			Client anotherClient = new Client("Merengada", "Vainilla", "Mere.Vai@example.com", passwordEncoder.encode("vainillaSky"), Rol.CLIENT);
+			clientRepository.save(anotherClient);
+
+			Account anotherAccount1 = new Account("VIN003", 10000, anotherClient, LocalDate.now());
+			Account anotherAccount2 = new Account("VIN004", 20000, anotherClient,LocalDate.now());
+			accountRepository.save(anotherAccount1);
+			accountRepository.save(anotherAccount2);
+
+			//MERENGADA'S TRANSACTIONS
+
 			Transaction transaction01 = new Transaction(300000, "Honorarios", LocalDate.now(), TransactionType.CREDIT);
 			anotherAccount1.addTransaction(transaction01);
 			transactionRepository.save(transaction01);
@@ -85,25 +133,7 @@ public class HomebankingApplication {
 			anotherAccount2.addTransaction(transaction04);
 			transactionRepository.save(transaction04);
 
-
-			// Data test Loans
-			Loan loan1 = new Loan("Hipotecary", 500000, List.of(12, 24, 36, 48, 60));
-			loanRepository.save(loan1);
-
-			Loan loan2 = new Loan("Personal", 100000, List.of(6, 12, 24));
-			loanRepository.save(loan2);
-
-			Loan loan3 = new Loan("Vehicle", 300000, List.of(6, 12, 24, 36));
-			loanRepository.save(loan3);
-
-			//names
-
-
-			ClientLoan clientLoan01 = new ClientLoan(loan1, "Hipotecary", 60, 400000, melba);
-			clientLoanRepository.save(clientLoan01);
-
-			ClientLoan clientLoan02 = new ClientLoan(loan2, "Personal", 12, 50000, melba);
-			clientLoanRepository.save(clientLoan02);
+			//MERENGADA'S LOANS
 
 			ClientLoan clientLoan03 = new ClientLoan(loan2, "Personal", 24, 100000, anotherClient);
 			clientLoanRepository.save(clientLoan03);
@@ -111,20 +141,15 @@ public class HomebankingApplication {
 			ClientLoan clientLoan04 = new ClientLoan(loan3, "Vehicle", 36, 200000, anotherClient);
 			clientLoanRepository.save(clientLoan04);
 
-			//cards
-			//Melba
-			Card card01 = new Card(TransactionType.DEBIT, "Melba Morel",Color.GOLD, "2223-4582-2233-9154", 225,LocalDate.now(),LocalDate.ofYearDay(28,10) );
-			melba.addCard(card01);
-			cardRepository.save(card01);
-			Card card02 = new Card(TransactionType.CREDIT, "Melba Morel",Color.TITANIUM, "7273-4782-2273-9754", 275,LocalDate.now(),LocalDate.ofYearDay(28,10) );
-			melba.addCard(card02);
-			cardRepository.save(card02);
-
 			//Merengada
 
 			Card card03 = new Card(TransactionType.DEBIT, "Merengada Vainilla",Color.SILVER, "9823-4562-2233-9855", 655,LocalDate.now(),LocalDate.ofYearDay(28,10) );
 			anotherClient.addCard(card03);
 			cardRepository.save(card03);
+				//*********************************ADMIN**************************//
+			Client admin = new Client("Pepito", "Banquero", "pepitoBanquero@mindhublab.com", passwordEncoder.encode("eaeapepe"), Rol.ADMIN);
+			clientRepository.save(admin);
+
 	};
 }
 		}
