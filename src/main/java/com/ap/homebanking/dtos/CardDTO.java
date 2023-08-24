@@ -11,25 +11,25 @@ public class CardDTO {
 
     private String cardHolder;
 
-    private Color cardColor;
+    private Color color;
 
-    private String cardNumber;
+    private String number;
 
     private int cvv;
 
     private LocalDate creationDate;
-    private LocalDate expirationDate;
+    private LocalDate thruDate;
 
     public CardDTO(Card card) {
 
         this.id = card.getId();
         this.type = card.getType();
         this.cardHolder = card.getCardHolder();
-        this.cardColor = card.getCardColor();
+        this.color = card.getColor();
         this.cvv = card.getCvv();
-        this.cardNumber = card.getCardNumber();
+        this.number = card.getNumber();
         this.creationDate = card.getCreationDate();
-        this.expirationDate = card.getExpirationDate();
+        this.thruDate = card.getThruDate();
 
 
     }
@@ -54,20 +54,16 @@ public class CardDTO {
         this.cardHolder = cardHolder;
     }
 
-    public Color getCardColor() {
-        return cardColor;
+    public Color getColor() {
+        return color;
     }
 
-    public void setCardColor(Color cardColor) {
-        this.cardColor = cardColor;
+    public String getNumber() {
+        return number;
     }
 
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public int getCvv() {
@@ -82,15 +78,8 @@ public class CardDTO {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
-        this.creationDate = creationDate;
+    public LocalDate getThruDate() {
+        return thruDate;
     }
 
-    public LocalDate getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(LocalDate expirationDate) {
-        this.expirationDate = expirationDate;
-    }
 }

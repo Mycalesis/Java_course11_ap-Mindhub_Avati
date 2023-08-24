@@ -19,14 +19,14 @@ public class Card {
 
     private String cardHolder;
 
-    private Color cardColor;
+    private Color color;
 
-    private String cardNumber;
+    private String number;
 
     private int cvv;
 
     private LocalDate creationDate;
-    private LocalDate expirationDate;
+    private LocalDate thruDate;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -35,14 +35,14 @@ public class Card {
 
     //constructor default
     public Card(){}
-    public Card(TransactionType type, String cardHolder, Color cardColor, String cardNumber, int cvv, LocalDate creationDate, LocalDate expirationDate) {
+    public Card(TransactionType type, String cardHolder, Color color, String number, int cvv, LocalDate creationDate, LocalDate expirationDate) {
     this.type = type;
     this.cardHolder = cardHolder;
-    this.cardColor = cardColor;
-    this.cardNumber = cardNumber;
+    this.color = color;
+    this.number = number;
     this.cvv = cvv;
-    this.creationDate =creationDate;
-    this.expirationDate =expirationDate;
+    this.creationDate = creationDate;
+    this.thruDate = thruDate;
 
 }
 
@@ -66,20 +66,20 @@ public class Card {
         this.cardHolder = cardHolder;
     }
 
-    public Color getCardColor() {
-        return cardColor;
+    public Color getColor() {
+        return this.color;
     }
 
     public void setCardColor(Color cardColor) {
-        this.cardColor = cardColor;
+        this.color = cardColor;
     }
 
-    public String getCardNumber() {
-        return cardNumber;
+    public String getNumber() {
+        return this.number;
     }
 
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public int getCvv() {
@@ -98,12 +98,12 @@ public class Card {
         this.creationDate = creationDate;
     }
 
-    public LocalDate getExpirationDate() {
-        return expirationDate;
+    public LocalDate getThruDate() {
+        return thruDate;
     }
 
-    public void setExpirationDate(LocalDate expirationDate) {
-        this.expirationDate = expirationDate;
+    public void setThruDate(LocalDate thruDate) {
+        this.thruDate = thruDate;
     }
 
     public Client getClient() {

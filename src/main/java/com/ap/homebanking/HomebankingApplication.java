@@ -29,12 +29,12 @@ public class HomebankingApplication {
 			TransactionRepository transactionRepository,
 			LoanRepository loanRepository,
 			ClientLoanRepository clientLoanRepository, CardRepository cardRepository
-			//, PasswordEncoder passwordEncoder
+
 			) {
 		return args -> {
 
 			///MELBA MOREL
-			Client melba = new Client("Melba", "Morel", "melba@minhub.com",passwordEncoder.encode("melba123"), Rol.CLIENT);
+			Client melba = new Client("Melba", "Morel", "melba@mindhub.com",passwordEncoder.encode("melba123"), "CLIENT");
 			clientRepository.save(melba);
 
 			LocalDate today = LocalDate.now();
@@ -107,7 +107,7 @@ public class HomebankingApplication {
 
 			///MERENGADA VAINILLA
 
-			Client anotherClient = new Client("Merengada", "Vainilla", "Mere.Vai@example.com", passwordEncoder.encode("vainillaSky"), Rol.CLIENT);
+			Client anotherClient = new Client("Merengada", "Vainilla", "Mere.Vai@example.com", passwordEncoder.encode("vainillaSky"), "CLIENT");
 			clientRepository.save(anotherClient);
 
 			Account anotherAccount1 = new Account("VIN003", 10000, anotherClient, LocalDate.now());
@@ -147,7 +147,7 @@ public class HomebankingApplication {
 			anotherClient.addCard(card03);
 			cardRepository.save(card03);
 				//*********************************ADMIN**************************//
-			Client admin = new Client("Pepito", "Banquero", "pepitoBanquero@mindhublab.com", passwordEncoder.encode("eaeapepe"), Rol.ADMIN);
+			Client admin = new Client("Pepito", "Banquero", "pepito@mindhub.com", passwordEncoder.encode("123"), "ADMIN");
 			clientRepository.save(admin);
 
 	};

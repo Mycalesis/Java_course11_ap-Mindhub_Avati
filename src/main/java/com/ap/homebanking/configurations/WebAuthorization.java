@@ -24,7 +24,13 @@ public class WebAuthorization extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
 
-                .antMatchers("/rest/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/login").permitAll()
+
+                .antMatchers(HttpMethod.POST, "/api/logout").permitAll()
+
+                .antMatchers("/api/clients").hasAuthority("ADMIN")
+
+                .antMatchers( "/api/clients/current").hasAuthority("CLIENT") // esta como permitAll para descartar al antMatcher como problema
 
                 .antMatchers("/web/accounts.html").hasAuthority("CLIENT")
 
@@ -32,11 +38,8 @@ public class WebAuthorization extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/web/cards.html").hasAuthority("CLIENT") //acá no deberia acceder solo el admin?? para que sea el client deberian especificarse solo las tarjetas de melba
 
-                .antMatchers("/web/account.html").hasAuthority("CLIENT")
-
-                .antMatchers(HttpMethod.GET, "/api/clients/**").hasAuthority("CLIENT");
-
-
+                .antMatchers("/rest/**").hasAuthority("ADMIN")
+        ;
 
         http.formLogin()
 
@@ -47,31 +50,13 @@ public class WebAuthorization extends WebSecurityConfigurerAdapter {
                 .loginPage("/api/login");
 
 
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
-
-        http.csrf().disable();
-        http.logout().logoutUrl("/api/logout");
-
-
-        //disabling frameOptions so h2-console can be accessed
-
-        http.headers(headers -> headers.frameOptions().disable());
-
-        // if user is not authenticated, just send an authentication failure response
-
-        http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
-
-        // if login is successful, just clear the flags asking for authentication
-
-        http.formLogin().successHandler((req, res, auth) -> clearAuthenticationAttributes(req));
-
-        // if login fails, just send an authentication failure response
-
-        http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
-
-        // if logout is successful, just send a success response
-
-        http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
+            http.csrf().disable();
+            http.logout().logoutUrl("/api/logout");
+            http.headers().frameOptions().disable();
+            http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+            http.formLogin().successHandler((req, res, auth) -> clearAuthenticationAttributes(req));
+            http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+            http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
 
     }
 

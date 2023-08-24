@@ -2,13 +2,11 @@ package com.ap.homebanking.controllers;
 
 import com.ap.homebanking.dtos.ClientDTO;
 import com.ap.homebanking.models.Client;
-import com.ap.homebanking.models.Rol;
-import com.ap.homebanking.repositories.CardRepository;
-import com.ap.homebanking.repositories.ClientLoanRepository;
-import com.ap.homebanking.repositories.ClientRepository;
+import com.ap.homebanking.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,39 +17,24 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class ClientController {
 
+    @Autowired
+    private ClientRepository clientRepository;
 
     @Autowired
-    private  ClientRepository clientRepository;
+    private PasswordEncoder passwordEncoder;
+
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private AccountRepository accountRepository;
 
+    @Autowired
+    private TransactionRepository transactionRepository;
 
+    @Autowired
+    private ClientLoanRepository clientLoanRepository;
 
-    // Endpoint para registrar un nuevo cliente
-    @RequestMapping(path = "/clients", method = RequestMethod.POST)
-    public ResponseEntity<Object> register(
-            @RequestParam String firstName,
-            @RequestParam String lastName,
-            @RequestParam String email,
-            @RequestParam String password,
-            @RequestParam Rol rol) {
-
-        // Verificar si faltan datos
-        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>("Missing data", HttpStatus.BAD_REQUEST);
-        }
-
-        // Verificar si el correo ya está en uso
-        if (clientRepository.findByEmail(email) != null) {
-            return new ResponseEntity<>("Email already in use", HttpStatus.BAD_REQUEST);
-        }
-
-        // Crear y guardar el nuevo cliente
-        clientRepository.save(new Client(firstName, lastName, email, passwordEncoder.encode(password), rol));
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
+    @Autowired
+    private CardRepository cardRepository;
 
     // Endpoint para obtener la lista de clientes
     @GetMapping("/clients")
@@ -60,14 +43,54 @@ public class ClientController {
     }
 
     // Endpoint para obtener un cliente por su ID
-    @RequestMapping("/clients/{id}")
-    public ResponseEntity<ClientDTO> getClientById(@PathVariable Long id) {
+
+    @GetMapping("/clients/{id}")
+    public ClientDTO getClientById(@PathVariable Long id) {
         Client client = clientRepository.findById(id).orElse(null);
         if (client != null) {
-            return new ResponseEntity<>(new ClientDTO(client), HttpStatus.OK);
+            return new ClientDTO(client);
+        } else {
+            return null;
+        }
+    }
+
+    @PostMapping("/clients")
+    public ResponseEntity<Object> register(
+            @RequestParam String firstName,
+            @RequestParam String lastName,
+            @RequestParam String email,
+            @RequestParam String password) {
+
+
+        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.BAD_REQUEST);
+        }
+
+
+        if (clientRepository.findByEmail(email) != null) {
+            return new ResponseEntity<>("Email already in use", HttpStatus.BAD_REQUEST);
+        }
+
+
+        clientRepository.save(new Client(firstName, lastName, email, passwordEncoder.encode(password), "CLIENT"));
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/clients/current")
+    public ResponseEntity<ClientDTO> getCurrentClient(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // Unauthorized if not authenticated
+        }
+        String email = authentication.getName();
+        Client client2 = clientRepository.findByEmail(email);
+
+        if (client2 != null) {
+            ClientDTO clientDTO = new ClientDTO(client2);
+            return new ResponseEntity<>(clientDTO, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-}
 
+}

@@ -1,10 +1,7 @@
 package com.ap.homebanking.dtos;
 
-import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
-import com.ap.homebanking.models.Rol;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,7 +13,7 @@ public class ClientDTO {
     private String lastName;
     private String email;
 
-    private Rol rol;
+    private String role;
     private String password;
     private Set<AccountDTO> accounts;
 
@@ -28,7 +25,7 @@ public class ClientDTO {
         this.lastName = client.getLastName();
         this.email = client.getEmail();
         this.password = client.getPassword();
-        this.rol = client.getRol();
+        this.role = client.getRole();
         this.accounts = client.getAccounts().stream()
                 .map(account -> new AccountDTO(account))
                 .collect(Collectors.toSet());
@@ -72,8 +69,8 @@ public class ClientDTO {
         return password;
     }
 
-    public Rol getRol() {
-        return rol;
+    public String getRole() {
+        return role;
     }
 
     public void setPassword(String password) {
@@ -84,23 +81,15 @@ public class ClientDTO {
         return id;
     }
 
-//    public Set<AccountDTO> getAccounts() {
-//        return accounts;
-//    }
+    public Set<CardDTO> getCards() {
+        return cards;
+    }
 
-//    public Set<ClientLoanDTO> getClientLoans() {
-//        return clientLoans;
-//    }
+    public Set<AccountDTO> getAccounts() {
+        return accounts;
+    }
 
-//    public void setClientLoans(Set<ClientLoanDTO> clientLoans) {
-//        this.clientLoans = clientLoans;
-//    }
-
-//    public Set<CardDTO> getCards() {
-//        return cards;
-//    }
-
-//    public void setCards(Set<CardDTO> cards) {
-//        this.cards = cards;
-//    }
+    public Set<ClientLoanDTO> getClientLoans() {
+        return clientLoans;
+    }
 }

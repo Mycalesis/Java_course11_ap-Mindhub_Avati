@@ -16,12 +16,10 @@ import java.util.stream.Collectors;
     @RequestMapping("/api")
     public class ClientLoanController {
 
-        private ClientLoanRepository clientLoanRepository;
 
         @Autowired
-        public ClientLoanController (ClientLoanRepository clientloanRepository){
-            this.clientLoanRepository = clientLoanRepository;
-        }
+        private ClientLoanRepository clientLoanRepository;
+
 
         @GetMapping("/loans")
         public List<ClientLoanDTO> getClientLoan() {

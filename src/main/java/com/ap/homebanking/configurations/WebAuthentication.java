@@ -1,6 +1,5 @@
 package com.ap.homebanking.configurations;
 import com.ap.homebanking.models.Client;
-import com.ap.homebanking.models.Rol;
 import com.ap.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +31,7 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
 
             if (client != null) {
 
-                if (client.getRol().equals(Rol.CLIENT)) {
+                if (client.getRole().equals("CLIENT")) {
 
                     return new User(client.getEmail(), client.getPassword(),
                             AuthorityUtils.createAuthorityList("CLIENT")); //guardando los roles
@@ -47,7 +46,6 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
         });
 
     }
-
             @Bean ///necesito el bean porque el password encoder lo voy a necesitar en otras clases de mi programa
             public PasswordEncoder passwordEncoder () {
                 return PasswordEncoderFactories.createDelegatingPasswordEncoder();
