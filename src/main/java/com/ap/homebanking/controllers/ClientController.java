@@ -1,6 +1,7 @@
 package com.ap.homebanking.controllers;
 
 import com.ap.homebanking.dtos.ClientDTO;
+import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @RestController
@@ -61,22 +64,27 @@ public class ClientController {
             @RequestParam String email,
             @RequestParam String password) {
 
-
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.BAD_REQUEST);
         }
-
 
         if (clientRepository.findByEmail(email) != null) {
             return new ResponseEntity<>("Email already in use", HttpStatus.BAD_REQUEST);
         }
 
+        Client newClient = new Client(firstName, lastName, email, passwordEncoder.encode(password), "CLIENT");
+        Client savedClient = clientRepository.save(newClient);
 
-        clientRepository.save(new Client(firstName, lastName, email, passwordEncoder.encode(password), "CLIENT"));
+        String prefix = "VIN-";
+        Random random = new Random();
+        int randomNumber = random.nextInt(99999999) + 1;
+        String accountNumber = prefix + randomNumber;
+
+        Account newAccount = new Account(accountNumber, 0, savedClient, LocalDate.now());
+        accountRepository.save(newAccount);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
     @GetMapping("/clients/current")
     public ResponseEntity<ClientDTO> getCurrentClient(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {

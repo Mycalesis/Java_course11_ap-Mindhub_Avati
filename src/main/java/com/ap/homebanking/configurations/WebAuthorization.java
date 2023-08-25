@@ -28,9 +28,11 @@ public class WebAuthorization extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(HttpMethod.POST, "/api/logout").permitAll()
 
-                .antMatchers("/api/clients").hasAuthority("ADMIN")
+                .antMatchers("/api/clients").permitAll() //solo funciona con permitAll y ESTA MAL
 
                 .antMatchers( "/api/clients/current").hasAuthority("CLIENT") // esta como permitAll para descartar al antMatcher como problema
+
+                .antMatchers(HttpMethod.POST, "/api/clients/current/accounts").hasAuthority("CLIENT")
 
                 .antMatchers("/web/accounts.html").hasAuthority("CLIENT")
 

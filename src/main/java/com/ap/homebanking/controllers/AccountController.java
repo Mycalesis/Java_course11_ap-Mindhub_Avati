@@ -2,17 +2,21 @@ package com.ap.homebanking.controllers;
 
 import com.ap.homebanking.dtos.AccountDTO;
 import com.ap.homebanking.models.Account;
+import com.ap.homebanking.models.Client;
 import com.ap.homebanking.models.Transaction;
 import com.ap.homebanking.repositories.AccountRepository;
+import com.ap.homebanking.repositories.ClientRepository;
 import com.ap.homebanking.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @RestController
@@ -20,16 +24,14 @@ import java.util.stream.Collectors;
 public class AccountController {
 
     @Autowired
-    private final AccountRepository accountRepository;
+    private AccountRepository accountRepository;
 
     @Autowired
-    private final TransactionRepository transactionRepository;
+    private TransactionRepository transactionRepository;
 
+    @Autowired
+    private ClientRepository clientRepository;
 
-    public AccountController(AccountRepository accountRepository, TransactionRepository transactionRepository) {
-        this.accountRepository = accountRepository;
-        this.transactionRepository = transactionRepository;
-    }
 
     @GetMapping("/accounts")
     public List<AccountDTO> getAccounts() {
@@ -46,4 +48,25 @@ public class AccountController {
             return null;
         }
     }
+
+    @PostMapping("/clients/current/accounts")
+    public ResponseEntity<Object> createAccount(Authentication authentication
+            ) {
+        Client client03 = clientRepository.findByEmail(authentication.getName());
+        String prefix = "VIN-";
+        Random random = new Random();
+        int randomNumber = random.nextInt(99999999) + 1;
+        String accountNumber = prefix + randomNumber;
+
+        List<Account> clientAccounts = accountRepository.findByClient(client03);
+        if (clientAccounts.size() >= 3) {
+            return new ResponseEntity<>("Cannot create a new account", HttpStatus.FORBIDDEN);
+        }
+
+        Account newAccount = new Account(accountNumber, 0, client03, LocalDate.now());
+        accountRepository.save(newAccount);
+
+        return new ResponseEntity<>("Account created correctly", HttpStatus.CREATED);
+    }
+
 }

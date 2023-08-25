@@ -40,8 +40,8 @@ public class HomebankingApplication {
 			LocalDate today = LocalDate.now();
 			LocalDate tomorrow = today.plusDays(1);
 			//clients acc
-			Account account1 = new Account("VIN001", 5000, melba, LocalDate.now());
-			Account account2 = new Account("VIN002", 7500, melba, LocalDate.now());
+			Account account1 = new Account("VIN-00000001", 5000, melba, LocalDate.now());
+			Account account2 = new Account("VIN-00000002", 7500, melba, LocalDate.now());
 			accountRepository.save(account1);
 			accountRepository.save(account2);
 
@@ -110,8 +110,8 @@ public class HomebankingApplication {
 			Client anotherClient = new Client("Merengada", "Vainilla", "Mere.Vai@example.com", passwordEncoder.encode("vainillaSky"), "CLIENT");
 			clientRepository.save(anotherClient);
 
-			Account anotherAccount1 = new Account("VIN003", 10000, anotherClient, LocalDate.now());
-			Account anotherAccount2 = new Account("VIN004", 20000, anotherClient,LocalDate.now());
+			Account anotherAccount1 = new Account("VIN-00000003", 10000, anotherClient, LocalDate.now());
+			Account anotherAccount2 = new Account("VIN-00000004", 20000, anotherClient,LocalDate.now());
 			accountRepository.save(anotherAccount1);
 			accountRepository.save(anotherAccount2);
 
