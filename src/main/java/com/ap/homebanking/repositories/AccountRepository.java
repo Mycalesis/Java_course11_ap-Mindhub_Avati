@@ -12,7 +12,5 @@ import java.util.List;
 @RepositoryRestResource
 
 public interface AccountRepository extends JpaRepository <Account, Long> {
-
-    List<Transaction> findByClient_Id(Long clientId);
     List<Account> findByClient(Client client);
 }

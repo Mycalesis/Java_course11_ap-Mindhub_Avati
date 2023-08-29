@@ -10,11 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+
 
 @RestController
 @RequestMapping("/api")
@@ -39,13 +40,15 @@ public class ClientController {
     @Autowired
     private CardRepository cardRepository;
 
-    // Endpoint para obtener la lista de clientes
+
     @GetMapping("/clients")
     public List<ClientDTO> getClients() {
         return clientRepository.findAll().stream().map(ClientDTO::new).collect(Collectors.toList());
     }
 
-    // Endpoint para obtener un cliente por su ID
+
+
+
 
     @GetMapping("/clients/{id}")
     public ClientDTO getClientById(@PathVariable Long id) {
@@ -56,6 +59,8 @@ public class ClientController {
             return null;
         }
     }
+
+
 
     @PostMapping("/clients")
     public ResponseEntity<Object> register(
@@ -82,9 +87,10 @@ public class ClientController {
 
         Account newAccount = new Account(accountNumber, 0, savedClient, LocalDate.now());
         accountRepository.save(newAccount);
-
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+
     @GetMapping("/clients/current")
     public ResponseEntity<ClientDTO> getCurrentClient(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {

@@ -5,7 +5,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
@@ -24,23 +23,29 @@ public class WebAuthorization extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
 
-                .antMatchers(HttpMethod.POST, "/api/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/login", "/api/logout","/api/clients").permitAll()
 
-                .antMatchers(HttpMethod.POST, "/api/logout").permitAll()
+                .antMatchers("/web/index.html","/web/js/index.js","/web/img/favicon.ico","/web/img/mindhub.jpg", "/web/img/Mindhub-logo.png","/web/css/style.css").permitAll()
 
-                .antMatchers("/api/clients").permitAll() //solo funciona con permitAll y ESTA MAL
+                .antMatchers("/api/clients/current/cards", "/api/clients/current").hasAnyAuthority("CLIENT", "ADMIN")
 
-                .antMatchers( "/api/clients/current").hasAuthority("CLIENT") // esta como permitAll para descartar al antMatcher como problema
+                .antMatchers(HttpMethod.POST, "/api/clients/current/accounts", "/api/clients/current/cards").hasAnyAuthority("CLIENT", "ADMIN")
 
-                .antMatchers(HttpMethod.POST, "/api/clients/current/accounts").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.GET, "/api/clients/current/cards").hasAnyAuthority("CLIENT", "ADMIN")
 
-                .antMatchers("/web/accounts.html").hasAuthority("CLIENT")
+                .antMatchers("/web/accounts.html", "/web/account.html","/web/cards.html", "/web/create-cards.html").hasAnyAuthority("CLIENT", "ADMIN")
 
-                .antMatchers("/web/account.html").hasAuthority("CLIENT")
+                .antMatchers("/web/js/accounts.js", "/web/js/account.js","/web/js/cards.js", "/web/js/create-cards.js").hasAnyAuthority("CLIENT", "ADMIN")
 
-                .antMatchers("/web/cards.html").hasAuthority("CLIENT") //acá no deberia acceder solo el admin?? para que sea el client deberian especificarse solo las tarjetas de melba
+                .antMatchers("/web/js/accounts.js", "/web/js/account.js","/web/js/cards.js", "/web/js/create-cards.js").hasAnyAuthority("CLIENT", "ADMIN")
 
-                .antMatchers("/rest/**").hasAuthority("ADMIN")
+                .antMatchers("/web/css/cards.css").hasAnyAuthority("CLIENT", "ADMIN")
+
+                .antMatchers(HttpMethod.GET,"/api/clients").hasAuthority("ADMIN")
+
+                .antMatchers("/rest/**", "/h2-console/**").hasAuthority("ADMIN")
+
+                .anyRequest().denyAll()
         ;
 
         http.formLogin()

@@ -42,16 +42,9 @@ public class CardDTO {
         return type;
     }
 
-    public void setType(TransactionType type) {
-        this.type = type;
-    }
 
     public String getCardHolder() {
         return cardHolder;
-    }
-
-    public void setCardHolder(String cardHolder) {
-        this.cardHolder = cardHolder;
     }
 
     public Color getColor() {
@@ -62,17 +55,11 @@ public class CardDTO {
         return number;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
 
     public int getCvv() {
         return cvv;
     }
 
-    public void setCvv(int cvv) {
-        this.cvv = cvv;
-    }
 
     public LocalDate getCreationDate() {
         return creationDate;

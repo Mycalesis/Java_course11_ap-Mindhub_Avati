@@ -35,7 +35,7 @@ public class Card {
 
     //constructor default
     public Card(){}
-    public Card(TransactionType type, String cardHolder, Color color, String number, int cvv, LocalDate creationDate, LocalDate expirationDate) {
+    public Card(TransactionType type, String cardHolder, Color color, String number, int cvv, LocalDate creationDate, LocalDate thruDate) {
     this.type = type;
     this.cardHolder = cardHolder;
     this.color = color;
@@ -67,11 +67,11 @@ public class Card {
     }
 
     public Color getColor() {
-        return this.color;
+        return color;
     }
 
-    public void setCardColor(Color cardColor) {
-        this.color = cardColor;
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public String getNumber() {
