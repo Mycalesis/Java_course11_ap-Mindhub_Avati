@@ -54,15 +54,18 @@ public class CardController {
             @RequestParam TransactionType cardType,
             Authentication authentication) {
 
-        List<Card> sameClassCards = cardRepository.findByColorAndType(cardColor, cardType);
-
-        long numberOfCards = sameClassCards.size();
-
         Client authClient = clientRepository.findByEmail(authentication.getName());
+
+        List<Card> sameTypeAndColorCards = cardRepository.findByClientAndColorAndType(authClient, cardColor, cardType);
+
+        if (sameTypeAndColorCards.size() >= 1) {
+            return new ResponseEntity<>("Error, a card of this type and color already exists", HttpStatus.FORBIDDEN);
+        }
+
         List<Card> clientCards = cardRepository.findByClient(authClient);
 
-        if (numberOfCards >= 3) {
-            return new ResponseEntity<>("Error, max number of cards of this class surpassed", HttpStatus.FORBIDDEN);
+        if (clientCards.size() >= 6) {
+            return new ResponseEntity<>("Error, max number of cards surpassed", HttpStatus.FORBIDDEN);
         }
 
         ////
