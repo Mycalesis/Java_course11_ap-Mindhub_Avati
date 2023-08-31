@@ -60,23 +60,38 @@ public class AccountController {
     }
 
     @PostMapping("/clients/current/accounts")
-    public ResponseEntity<Object> createAccount(Authentication authentication
-            ) {
-        Client client03 = clientRepository.findByEmail(authentication.getName());
+    public ResponseEntity<Object> createAccount(Authentication authentication) {
+        Client client = clientRepository.findByEmail(authentication.getName());
+
         String prefix = "VIN-";
         Random random = new Random();
-        int randomNumber = random.nextInt(99999999) + 1;
-        String number = prefix + randomNumber;
 
-        int accountCount = accountRepository.countByClient(client03);
-        if (accountCount >= 3) {
-            return new ResponseEntity<>("Cannot create a new account", HttpStatus.FORBIDDEN);
+        // Intentar generar un número de cuenta único hasta 100 veces
+        for (int attempt = 0; attempt < 100; attempt++) {
+            int randomNumber = random.nextInt(99999999) + 1;
+            String accountNumber = prefix + randomNumber;
+
+
+            boolean accountExists = accountRepository.existsByNumber(accountNumber);
+
+            if (!accountExists) {
+                int accountCount = accountRepository.countByClient(client);
+
+                if (accountCount >= 3) {
+                    return new ResponseEntity<>("Cannot create a new account", HttpStatus.FORBIDDEN);
+                }
+
+                Account newAccount = new Account(accountNumber, 0, client, LocalDate.now());
+                accountRepository.save(newAccount);
+
+                client.addAccount(newAccount);
+                return new ResponseEntity<>("Account created correctly", HttpStatus.CREATED);
+            }
         }
 
-        Account newAccount = new Account(number, 0, client03, LocalDate.now());
-        accountRepository.save(newAccount);
-
-        return new ResponseEntity<>("Account created correctly", HttpStatus.CREATED);
+        return new ResponseEntity<>("Unable to create account", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
+
+
