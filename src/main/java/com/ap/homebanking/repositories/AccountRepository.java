@@ -12,5 +12,10 @@ import java.util.List;
 @RepositoryRestResource
 
 public interface AccountRepository extends JpaRepository <Account, Long> {
-    List<Account> findByClient(Client client);
+    int countByClient(Client client);
+
+
+    Account findByClientAndNumber(Client client, String number);
+
+    Account findByNumber(String Number);
 }

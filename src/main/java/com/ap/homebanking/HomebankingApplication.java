@@ -108,7 +108,7 @@ public class HomebankingApplication {
 
 			///MERENGADA VAINILLA
 
-			Client anotherClient = new Client("Merengada", "Vainilla", "Mere.Vai@example.com", passwordEncoder.encode("vainillaSky"), "CLIENT");
+			Client anotherClient = new Client("Merengada", "Vainilla", "mere.vai@example.com", passwordEncoder.encode("vainillasky"), "CLIENT");
 			clientRepository.save(anotherClient);
 
 			Account anotherAccount1 = new Account("VIN-00000003", 10000, anotherClient, LocalDate.now());

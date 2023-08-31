@@ -1,5 +1,4 @@
 package com.ap.homebanking.controllers;
-
 import com.ap.homebanking.dtos.AccountDTO;
 import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
@@ -33,9 +32,20 @@ public class AccountController {
     private ClientRepository clientRepository;
 
 
-    @GetMapping("/accounts")
-    public List<AccountDTO> getAccounts() {
-        return accountRepository.findAll().stream().map(AccountDTO::new).collect(Collectors.toList());
+    @GetMapping("/clients/current/accounts")
+    public List<AccountDTO> getAccountsForCurrentUser(Authentication authentication) {
+
+        Client client03 = clientRepository.findByEmail(authentication.getName());
+        // Verifica si el cliente autenticado es nulo
+        if (client03 == null) {
+            return (List<AccountDTO>) new ResponseEntity<>("Not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+
+        List<AccountDTO> accountDTOs = client03.getAccounts().stream()
+                .map(account -> new AccountDTO(account))
+                .collect(Collectors.toList());
+
+        return accountDTOs;
     }
 
     @GetMapping("/accounts/{id}")
@@ -56,14 +66,14 @@ public class AccountController {
         String prefix = "VIN-";
         Random random = new Random();
         int randomNumber = random.nextInt(99999999) + 1;
-        String accountNumber = prefix + randomNumber;
+        String number = prefix + randomNumber;
 
-        List<Account> clientAccounts = accountRepository.findByClient(client03);
-        if (clientAccounts.size() >= 3) {
+        int accountCount = accountRepository.countByClient(client03);
+        if (accountCount >= 3) {
             return new ResponseEntity<>("Cannot create a new account", HttpStatus.FORBIDDEN);
         }
 
-        Account newAccount = new Account(accountNumber, 0, client03, LocalDate.now());
+        Account newAccount = new Account(number, 0, client03, LocalDate.now());
         accountRepository.save(newAccount);
 
         return new ResponseEntity<>("Account created correctly", HttpStatus.CREATED);

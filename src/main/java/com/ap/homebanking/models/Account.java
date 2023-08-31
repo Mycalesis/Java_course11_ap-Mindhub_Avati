@@ -18,8 +18,8 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String accountNumber;
-    private int balance;
+    private String number;
+    private double balance;
 
     private LocalDate creationDate;
 
@@ -33,8 +33,8 @@ public class Account {
     public Account() {
     }
 
-    public Account(String accountNumber, int balance, Client client, LocalDate creationDate) {
-        this.accountNumber = accountNumber;
+    public Account(String number, double balance, Client client, LocalDate creationDate) {
+        this.number = number;
         this.balance = balance;
         this.client = client;
         this.creationDate = creationDate;
@@ -48,19 +48,19 @@ public class Account {
         this.id = id;
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
+    public String getNumber() {
+        return number;
     }
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 

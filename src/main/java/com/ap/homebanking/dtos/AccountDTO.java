@@ -11,14 +11,14 @@ import java.util.stream.Collectors;
 
 public class AccountDTO {
 
-    private String accountNumber;
+    private String number;
     private long id;
-    private int balance;
+    private double balance;
     private LocalDate creationDate;
     private List<TransactionDTO> transactions;
 
     public AccountDTO(Account account) {
-        this.accountNumber = account.getAccountNumber();
+        this.number = account.getNumber();
         this.balance = account.getBalance();
         this.id = account.getId();
         this.creationDate = account.getCreationDate();
@@ -30,18 +30,18 @@ public class AccountDTO {
         this.transactions = transactions.stream().map(TransactionDTO::new).collect(Collectors.toList());
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
+    public String getNumber() {
+        return number;
     }
 
-    //public void setAccountNumber(String accountNumber) {this.accountNumber = accountNumber;}
+    //public void setnumber(String number) {this.number = number;}
 
     public long getId() {
         return id;
     }
 
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
