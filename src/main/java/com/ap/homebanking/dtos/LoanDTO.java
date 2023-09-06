@@ -10,17 +10,19 @@ public class LoanDTO {
     private long id;
     private String name;
     private double maxAmount;
-    private List<Integer> typeOfPayments = new ArrayList<>();
-    private List<ClientLoanDTO> clientLoans = new ArrayList<>();
+    private List<Integer> payments = new ArrayList<>();
+//    private List<ClientLoanDTO> clientLoans = new ArrayList<>();
+
+    public LoanDTO (){}
 
     public LoanDTO(Loan loan) {
         this.id = loan.getId();
         this.name = loan.getName();
         this.maxAmount = loan.getMaxAmount();
-        this.typeOfPayments = loan.getTypeOfPayments();
-        this.clientLoans = loan.getClientLoans().stream()
-                .map(ClientLoanDTO::new)
-                .collect(Collectors.toList());
+        this.payments = loan.getTypeOfPayments();
+//        this.clientLoans = loan.getClientLoans().stream()
+//                .map(ClientLoanDTO::new)
+//                .collect(Collectors.toList());
     }
 
     public String getName() {
@@ -35,28 +37,18 @@ public class LoanDTO {
         return maxAmount;
     }
 
-    public void setMaxAmount(double maxAmount) {
-        this.maxAmount = maxAmount;
+    public List<Integer> getPayments() {
+        return payments;
     }
 
-    public List<Integer> getTypeOfPayments() {
-        return typeOfPayments;
-    }
 
-    public void setTypeOfPayments(List<Integer> typeOfPayments) {
-        this.typeOfPayments = typeOfPayments;
-    }
+//    public List<ClientLoanDTO> getClientLoans() {
+//        return clientLoans;
+//    }
+//
+//    public void setClientLoans(List<ClientLoanDTO> clientLoans) {
+//        this.clientLoans = clientLoans;
+//    }
 
-    public List<ClientLoanDTO> getClientLoans() {
-        return clientLoans;
-    }
-
-    public void setClientLoans(List<ClientLoanDTO> clientLoans) {
-        this.clientLoans = clientLoans;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
 

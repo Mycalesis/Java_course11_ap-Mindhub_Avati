@@ -29,7 +29,7 @@ public class Transaction {
 
     //constructor default
 
-    Transaction(){}
+    public Transaction(){}
 
     //constructor
 

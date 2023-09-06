@@ -5,8 +5,6 @@ import com.ap.homebanking.models.ClientLoan;
 public class ClientLoanDTO {
 
     private long id;
-    //private LoanDTO loan;
-    //private ClientDTO client;
 
     private String nameLoan;
     private int payment;
@@ -14,8 +12,6 @@ public class ClientLoanDTO {
 
     public ClientLoanDTO(ClientLoan clientLoan) {
         this.id = clientLoan.getId();
-        //this.loan = new LoanDTO(clientLoan.getLoan());
-        //this.client = new ClientDTO(clientLoan.getClient());
         this.nameLoan = clientLoan.getNameLoan();
         this.payment = clientLoan.getPayment();
         this.amount = clientLoan.getAmount();
