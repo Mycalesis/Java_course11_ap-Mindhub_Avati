@@ -5,8 +5,8 @@ import com.ap.homebanking.models.Card;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.models.Color;
 import com.ap.homebanking.models.TransactionType;
-import com.ap.homebanking.repositories.CardRepository;
-import com.ap.homebanking.repositories.ClientRepository;
+import com.ap.homebanking.services.CardService;
+import com.ap.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +25,10 @@ import java.util.stream.Collectors;
 public class CardController {
 
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
     @Autowired
-    private CardRepository cardRepository;
+    private CardService cardService;
 
     @GetMapping("/clients/current/cards")
     public ResponseEntity<Set<CardDTO>> filterCards(
@@ -37,7 +37,7 @@ public class CardController {
             @RequestParam TransactionType type) {
 
         String email = authentication.getName();
-        Client client = clientRepository.findByEmail(email);
+        Client client = clientService.findByEmail(email);
         Set<Card> cards = client.getCards();
 
         Set<CardDTO> filteredCards = cards.stream()
@@ -54,15 +54,15 @@ public class CardController {
             @RequestParam TransactionType cardType,
             Authentication authentication) {
 
-        Client authClient = clientRepository.findByEmail(authentication.getName());
+        Client authClient = clientService.findByEmail(authentication.getName());
 
-        List<Card> sameTypeAndColorCards = cardRepository.findByClientAndColorAndType(authClient, cardColor, cardType);
+        List<Card> sameTypeAndColorCards = cardService.sameTypeAndColorCards(authClient, cardColor, cardType);
 
         if (sameTypeAndColorCards.size() >= 1) {
             return new ResponseEntity<>("Error, a card of this type and color already exists", HttpStatus.FORBIDDEN);
         }
 
-        List<Card> clientCards = cardRepository.findByClient(authClient);
+        List<Card> clientCards = cardService.clientCards(authClient);
 
         if (clientCards.size() >= 6) {
             return new ResponseEntity<>("Error, max number of cards surpassed", HttpStatus.FORBIDDEN);
@@ -79,7 +79,7 @@ public class CardController {
 
         Card newCard = new Card(cardType, cardHolder, cardColor, randomCard, cvv, LocalDate.now(), thruDate);
         newCard.setClient(authClient);
-        cardRepository.save(newCard);
+        cardService.cardSave(newCard);
 
         return ResponseEntity.ok("Card created successfully");
     }

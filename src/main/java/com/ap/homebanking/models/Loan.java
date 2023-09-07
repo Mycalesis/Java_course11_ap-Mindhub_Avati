@@ -67,4 +67,6 @@ public class Loan {
 
     public void setClient(Client client) {
     }
+
+
 }

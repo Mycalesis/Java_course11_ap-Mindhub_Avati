@@ -1,40 +1,38 @@
 package com.ap.homebanking.controllers;
-
 import com.ap.homebanking.dtos.TransactionDTO;
 import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.models.Transaction;
 import com.ap.homebanking.models.TransactionType;
-import com.ap.homebanking.repositories.AccountRepository;
-import com.ap.homebanking.repositories.ClientRepository;
-import com.ap.homebanking.repositories.TransactionRepository;
+import com.ap.homebanking.services.AccountService;
+import com.ap.homebanking.services.ClientService;
+import com.ap.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api")
 public class TransactionController {
 
     @Autowired
-    private TransactionRepository transactionRepository;
+    private TransactionService transactionService;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
 
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
     @GetMapping("/transactions")
     public List<TransactionDTO> getTransactions() {
-        return transactionRepository.findAll().stream().map(transaction -> new TransactionDTO(transaction)).collect(Collectors.toList());
+        return transactionService.getTransactions();
     }
 
     @Transactional
@@ -50,14 +48,14 @@ public class TransactionController {
             return new ResponseEntity<>("Missing or invalid data", HttpStatus.BAD_REQUEST);
         }
 
-        Account clientAccountsTo = accountRepository.findByNumber(toAccountNumber);
+        Account clientAccountsTo = accountService.findByNumber(toAccountNumber);
 
         if (clientAccountsTo == null) {
             return new ResponseEntity<>("Missing or invalid data", HttpStatus.FORBIDDEN);
         }
-        Client clientAuth = clientRepository.findByEmail(authentication.getName());
+        Client clientAuth = clientService.findByEmail(authentication.getName());
 
-        Account clientAccounts = accountRepository.findByClientAndNumber(clientAuth, fromAccountNumber);
+        Account clientAccounts = accountService.findByClientAndNumber(clientAuth, fromAccountNumber);
 
         if (clientAccounts == null) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -84,10 +82,10 @@ public class TransactionController {
         clientAccounts.setBalance(clientAccounts.getBalance() - amount);
         clientAccountsTo.setBalance(clientAccountsTo.getBalance() + amount);
 
-        transactionRepository.save(debitTransaction);
-        transactionRepository.save(creditTransaction);
-        accountRepository.save(clientAccounts);
-        accountRepository.save(clientAccountsTo);
+        transactionService.savedTransactions(debitTransaction);
+        transactionService.savedTransactions(creditTransaction);
+        accountService.saveAccounts(clientAccounts);
+        accountService.saveAccounts(clientAccountsTo);
         return new ResponseEntity<>("Transaction successful", HttpStatus.CREATED);
     }
 }

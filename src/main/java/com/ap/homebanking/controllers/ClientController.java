@@ -1,9 +1,9 @@
 package com.ap.homebanking.controllers;
-
 import com.ap.homebanking.dtos.ClientDTO;
 import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
-import com.ap.homebanking.repositories.*;
+import com.ap.homebanking.services.AccountService;
+import com.ap.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
+
 
 
 
@@ -22,34 +22,24 @@ import java.util.stream.Collectors;
 public class ClientController {
 
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
 
     @Autowired
-    private AccountRepository accountRepository;
-
-    @Autowired
-    private TransactionRepository transactionRepository;
-
-    @Autowired
-    private ClientLoanRepository clientLoanRepository;
-
-    @Autowired
-    private CardRepository cardRepository;
-
+    private AccountService accountService;
 
     @GetMapping("/clients")
     public List<ClientDTO> getClients() {
-        return clientRepository.findAll().stream().map(ClientDTO::new).collect(Collectors.toList());
+        return clientService.getClients();
     }
 
 
     @GetMapping("/clients/{id}")
     public ClientDTO getClientById(@PathVariable Long id) {
-        Client client = clientRepository.findById(id).orElse(null);
+        Client client = clientService.findById(id);
         if (client != null) {
             return new ClientDTO(client);
         } else {
@@ -70,12 +60,12 @@ public class ClientController {
             return new ResponseEntity<>("Missing data", HttpStatus.BAD_REQUEST);
         }
 
-        if (clientRepository.findByEmail(email) != null) {
+        if (clientService.findByEmail(email) != null) {
             return new ResponseEntity<>("Email already in use", HttpStatus.BAD_REQUEST);
         }
 
         Client newClient = new Client(firstName, lastName, email, passwordEncoder.encode(password), "CLIENT");
-        Client savedClient = clientRepository.save(newClient);
+        Client savedClient = clientService.savedClient(newClient);
 
         String prefix = "VIN-";
         Random random = new Random();
@@ -83,7 +73,7 @@ public class ClientController {
         String accountNumber = prefix + randomNumber;
 
         Account newAccount = new Account(accountNumber, 0, savedClient, LocalDate.now());
-        accountRepository.save(newAccount);
+        accountService.saveAccounts(newAccount);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -94,7 +84,7 @@ public class ClientController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // Unauthorized if not authenticated
         }
         String email = authentication.getName();
-        Client client2 = clientRepository.findByEmail(email);
+        Client client2 = clientService.findByEmail(email);
 
         if (client2 != null) {
             ClientDTO clientDTO = new ClientDTO(client2);
