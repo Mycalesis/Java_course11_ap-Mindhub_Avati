@@ -1,6 +1,5 @@
 package com.ap.homebanking.controllers;
 import com.ap.homebanking.dtos.CardDTO;
-import com.ap.homebanking.dtos.ClientDTO;
 import com.ap.homebanking.models.*;
 import com.ap.homebanking.services.CardService;
 import com.ap.homebanking.services.ClientService;
@@ -26,26 +25,22 @@ public class CardController {
 
     @GetMapping("/clients/current/cards")
     public ResponseEntity<Set<CardDTO>> filterCards(
-            Authentication authentication,
-            @RequestParam Color color,
-            @RequestParam TransactionType type) {
+            Authentication authentication) {
 
         String email = authentication.getName();
         Client client = clientService.findByEmail(email);
-        ClientDTO clientDTO = new ClientDTO(client);
 
+        System.out.println(client.getCards());
         // Filter for status
-        Set<Card> activeCards = client.getCards().stream()
+        Set<CardDTO> activeCards = client.getCards().stream()
                 .filter(card -> card.getStatus().equals(Status.ACTIVE))
-                .collect(Collectors.toSet());
-        System.out.println(activeCards);
-        // Filter for color & typr
-        Set<CardDTO> filteredCards = activeCards.stream()
-                .filter(card -> card.getColor() == color && card.getType() == type)
                 .map(card -> new CardDTO(card))
                 .collect(Collectors.toSet());
+        System.out.println(activeCards);
 
-        return ResponseEntity.ok(filteredCards);
+
+        return ResponseEntity.ok(activeCards);
+
     }
 
     @PostMapping("/clients/current/cards")
@@ -100,7 +95,6 @@ public class CardController {
         if (cardFound == null){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Card missing");
         }
-
         if (cardFound.getStatus() == Status.ACTIVE) {
 
             cardFound.setStatus(Status.INACTIVE);

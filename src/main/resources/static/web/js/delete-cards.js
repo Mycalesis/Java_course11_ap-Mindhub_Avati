@@ -1,18 +1,20 @@
 Vue.createApp({
   data() {
     return {
-      cards: [],
-      clientInfo: {},
+      cards: {},
+      numberSelected: "",
       errorToats: null,
       errorMsg: null,
     };
   },
   methods: {
     getData: function () {
-      axios.get("/api/clients/current")
+      axios.get("/api/clients/current/cards")
         .then((response) => {
-          this.clientInfo = response.data;
-          this.cards = this.clientInfo.cards;
+
+          this.cards = response.data;
+          console.log(this.cards)
+
         })
         .catch((error) => {
           this.errorMsg = "Error, missing data";
@@ -27,28 +29,29 @@ Vue.createApp({
           this.errorToats.show();
         });
     },
-    deleteCardConfirmation: function (number) {
-      // Muestra una confirmación al usuario y, si confirma, borra la tarjeta
+    deleteCardConfirmation: function () {
+
       if (confirm('The card will be deleted ¿Are you sure do you want continue?')) {
-        this.deleteCard(number);
+        this.deleteCard(card.number);
       }
     },
-    deleteCard: async function (number) {
+    deleteCard: async function () {
       try {
-      console.log(this.number)
-        const response = await axios.post("/api/cards",`number=${this.number}`); //
+        console.log(this.numberSelected);
+        const response = await axios.post("/api/cards", `number=${this.numberSelected}`)
+        ;
         if (response.status === 200) {
-          // Borrado exitoso, actualiza la lista de tarjetas
-          this.getData(); // Vuelve a cargar las tarjetas después de borrar una
+
           alert('Card deleted');
         } else {
-          alert('Error, card cant be deleted');
+          alert('Error, card cant be deleted').then(response => window.location.href = "/web/cards.html");
         }
       } catch (error) {
         console.error('Error, card cant be deleted', error);
         alert('Error, card cant be deleted');
       }
     },
+
   },
   mounted() {
     this.getData(); // Obtén los datos al cargar la página

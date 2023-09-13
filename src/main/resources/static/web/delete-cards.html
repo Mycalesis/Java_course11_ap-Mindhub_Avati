@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-blind="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -75,10 +76,10 @@
                             <div class="row mb-3">
                                 <label for="card-select" class="col-sm-4 col-form-label">Select cards:</label>
                                 <div class="col-sm-7">
-                                    <select id="card-select" v-model="number" class="form-select" aria-label="Select a card" required>
-                                        <option value="none">Selecciona una tarjeta</option>
+                                    <select id="card-select" v-model="numberSelected" class="form-select" aria-label="Select a card" required>
+                                        <option value="none">{{numberSelected}}</option>
                                         <!-- Itera sobre las tarjetas disponibles y crea una opción para cada una -->
-                                        <option v-for="card in cards" :key="card.number" :value="card.number">{{ card.name }} ({{ card.number }})</option>
+                                        <option v-for="card in cards" :key="card.number" :value="card.number">{{card.number}}</option>
                                     </select>
                                 </div>
                             </div>
