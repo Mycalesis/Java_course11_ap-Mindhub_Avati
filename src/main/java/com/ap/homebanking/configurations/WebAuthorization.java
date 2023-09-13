@@ -22,27 +22,27 @@ public class WebAuthorization extends WebSecurityConfigurerAdapter {
         //antmatchers
 
         http.authorizeRequests()
-//                .antMatchers("/**").permitAll()
+                .antMatchers("/**").permitAll()
 
-                .antMatchers(HttpMethod.POST, "/api/login", "/api/logout","/api/clients").permitAll()
 
-                .antMatchers("/web/index.html","/web/js/index.js","/web/img/favicon.ico","/web/img/mindhub.jpg", "/web/img/Mindhub-logo.png","/web/css/style.css").permitAll()
 
-                .antMatchers("/api/clients/current/cards", "/api/clients/current").hasAnyAuthority("CLIENT", "ADMIN")
-
-                .antMatchers(HttpMethod.POST, "/api/clients/current/accounts", "/api/clients/current/cards", "/api/transfers","/api/loans").hasAnyAuthority("CLIENT", "ADMIN")
-
-                .antMatchers(HttpMethod.GET, "/api/clients/current/cards","/api/transactions").hasAnyAuthority("CLIENT", "ADMIN")
-
-                .antMatchers("/web/accounts.html", "/web/account.html","/web/cards.html", "/web/create-cards.html", "/web/transfers.html").hasAnyAuthority("CLIENT", "ADMIN")
-
-                .antMatchers("/web/js/accounts.js", "/web/js/account.js","/web/js/cards.js", "/web/js/create-cards.js", "/web/js/transfers.js", "/web/js/loan-application.js").hasAnyAuthority("CLIENT", "ADMIN")
-
-                .antMatchers("/web/css/cards.css").hasAnyAuthority("CLIENT", "ADMIN")
-
-               .antMatchers(HttpMethod.GET,"/api/clients").hasAuthority("ADMIN")
-
-               .antMatchers("/rest/**", "/h2-console/**").hasAuthority("ADMIN")
+//                .antMatchers(HttpMethod.POST, "/api/login", "/api/logout","/api/clients").permitAll()
+//
+//                .antMatchers("/web/index.html","/web/js/index.js","/web/img/favicon.ico","/web/img/mindhub.jpg", "/web/img/Mindhub-logo.png","/web/css/style.css").permitAll()
+//
+//                .antMatchers(HttpMethod.GET, "/api/clients/current","/api/accounts/{id}","/api/clients/current/accounts", "/api/transfers","/api/transactions", "/api/clients/current/cards", "/api/loans").hasAnyAuthority("CLIENT")
+//
+//                .antMatchers(HttpMethod.POST, "/api/clients/current/accounts", "/api/clients/current/cards","/api/loans","/api/transactions").hasAnyAuthority("CLIENT", "ADMIN")
+//
+//                .antMatchers("/web/accounts.html", "/web/account.html","/web/cards.html", "/web/create-cards.html", "/web/transfers.html", "/web/loan-application.html").hasAnyAuthority("CLIENT", "ADMIN")
+//
+//                .antMatchers("/web/js/accounts.js", "/web/js/account.js","/web/js/cards.js", "/web/js/create-cards.js", "/web/js/transfers.js", "/web/js/loan-application.js").hasAnyAuthority("CLIENT", "ADMIN")
+//
+//                .antMatchers("/web/css/cards.css").hasAnyAuthority("CLIENT", "ADMIN")
+//
+//               .antMatchers(HttpMethod.GET,"/api/clients").hasAuthority("ADMIN")
+//
+//               .antMatchers("/rest/**", "/h2-console/**").hasAuthority("ADMIN")
 
 //               .anyRequest().denyAll()
         ;

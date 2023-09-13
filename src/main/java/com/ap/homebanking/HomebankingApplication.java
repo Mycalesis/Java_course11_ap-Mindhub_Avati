@@ -70,11 +70,10 @@ public class HomebankingApplication {
 			account2.addTransaction(transaction5);
 			transactionRepository.save(transaction5);
 
-
-			//***** lOANS *******///
+						//***** lOANS *******///
 
 			// Data Loans
-			Loan loan1 = new Loan("Hipotecary", 500000, List.of(12, 24, 36, 48, 60));
+			Loan loan1 = new Loan("Mortgage", 500000, List.of(12, 24, 36, 48, 60));
 			loanRepository.save(loan1);
 
 			Loan loan2 = new Loan("Personal", 100000, List.of(6, 12, 24));
@@ -86,7 +85,7 @@ public class HomebankingApplication {
 
 			///MELBA'S LOANS
 
-			ClientLoan clientLoan01 = new ClientLoan(loan1, "Hipotecary", 60, 400000, melba);
+			ClientLoan clientLoan01 = new ClientLoan(loan1, "Mortgage", 60, 400000, melba);
 			clientLoanRepository.save(clientLoan01);
 
 			ClientLoan clientLoan02 = new ClientLoan(loan2, "Personal", 12, 50000, melba);
@@ -95,10 +94,10 @@ public class HomebankingApplication {
 
 			//cards
 			//Melba
-			Card card01 = new Card(TransactionType.DEBIT, "Melba Morel",Color.GOLD, "2223-4582-2233-9154", 225,LocalDate.now(),LocalDate.now().plus(5, ChronoUnit.YEARS));
+			Card card01 = new Card(TransactionType.DEBIT, "Melba Morel",Color.GOLD, "2223-4582-2233-9154", 225,LocalDate.now(),LocalDate.now().plus(5, ChronoUnit.YEARS),Status.INACTIVE);
 			melba.addCard(card01);
 			cardRepository.save(card01);
-			Card card02 = new Card(TransactionType.CREDIT, "Melba Morel",Color.TITANIUM, "7273-4782-2273-9754", 275,LocalDate.now(),LocalDate.now().plus(5, ChronoUnit.YEARS) );
+			Card card02 = new Card(TransactionType.CREDIT, "Melba Morel",Color.TITANIUM, "7273-4782-2273-9754", 275,LocalDate.now(),LocalDate.now().plus(5, ChronoUnit.YEARS),Status.ACTIVE );
 			melba.addCard(card02);
 			cardRepository.save(card02);
 
@@ -144,7 +143,7 @@ public class HomebankingApplication {
 
 			//Merengada
 
-			Card card03 = new Card(TransactionType.DEBIT, "Merengada Vainilla",Color.SILVER, "9823-4562-2233-9855", 655,LocalDate.now(),LocalDate.now().plus(5, ChronoUnit.YEARS) );
+			Card card03 = new Card(TransactionType.DEBIT, "Merengada Vainilla",Color.SILVER, "9823-4562-2233-9855", 655,LocalDate.now(),LocalDate.now().plus(5, ChronoUnit.YEARS),Status.ACTIVE );
 			anotherClient.addCard(card03);
 			cardRepository.save(card03);
 				//*********************************ADMIN**************************//

@@ -70,14 +70,11 @@ public class TransactionController {
             return new ResponseEntity<>("Source and destination accounts must be different", HttpStatus.FORBIDDEN);
         }
 
-        Transaction debitTransaction = new Transaction(amount, description, LocalDate.now(), TransactionType.DEBIT);
-        Transaction creditTransaction = new Transaction(amount, description, LocalDate.now(), TransactionType.CREDIT);
+        Transaction debitTransaction = new Transaction(amount,"Transaction to " + toAccountNumber + " : " + description, LocalDate.now(), TransactionType.DEBIT);
+        Transaction creditTransaction = new Transaction(amount, "Transaction from"+ fromAccountNumber + " : " + description, LocalDate.now(), TransactionType.CREDIT);
 
         clientAccounts.addTransaction(debitTransaction);
         clientAccountsTo.addTransaction(creditTransaction);
-
-        debitTransaction.setAccount(clientAccounts);
-        creditTransaction.setAccount(clientAccountsTo);
 
         clientAccounts.setBalance(clientAccounts.getBalance() - amount);
         clientAccountsTo.setBalance(clientAccountsTo.getBalance() + amount);

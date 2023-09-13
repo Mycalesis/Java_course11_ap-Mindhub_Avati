@@ -17,6 +17,7 @@ public class Card {
 
     private TransactionType type;
 
+    private Status status;
     private String cardHolder;
 
     private Color color;
@@ -35,7 +36,7 @@ public class Card {
 
     //constructor default
     public Card(){}
-    public Card(TransactionType type, String cardHolder, Color color, String number, int cvv, LocalDate creationDate, LocalDate thruDate) {
+    public Card(TransactionType type, String cardHolder, Color color, String number, int cvv, LocalDate creationDate, LocalDate thruDate, Status status) {
     this.type = type;
     this.cardHolder = cardHolder;
     this.color = color;
@@ -43,8 +44,17 @@ public class Card {
     this.cvv = cvv;
     this.creationDate = creationDate;
     this.thruDate = thruDate;
+    this.status = status;
 
 }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     public long getId() {
         return id;
@@ -94,9 +104,9 @@ public class Card {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
-        this.creationDate = creationDate;
-    }
+//    public void setCreationDate(LocalDate creationDate) {
+//        this.creationDate = creationDate;
+//    }
 
     public LocalDate getThruDate() {
         return thruDate;

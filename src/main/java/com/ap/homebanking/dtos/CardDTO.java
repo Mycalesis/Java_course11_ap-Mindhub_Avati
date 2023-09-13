@@ -1,6 +1,7 @@
 package com.ap.homebanking.dtos;
 import com.ap.homebanking.models.Card;
 import com.ap.homebanking.models.Color;
+import com.ap.homebanking.models.Status;
 import com.ap.homebanking.models.TransactionType;
 import java.time.LocalDate;
 
@@ -15,10 +16,15 @@ public class CardDTO {
 
     private String number;
 
+    private Status status;
+
     private int cvv;
 
     private LocalDate creationDate;
     private LocalDate thruDate;
+
+    public CardDTO() {
+    }
 
     public CardDTO(Card card) {
 
@@ -30,8 +36,13 @@ public class CardDTO {
         this.number = card.getNumber();
         this.creationDate = card.getCreationDate();
         this.thruDate = card.getThruDate();
+        this.status = card.getStatus();
 
 
+    }
+
+    public Status getStatus() {
+        return status;
     }
 
     public long getId() {

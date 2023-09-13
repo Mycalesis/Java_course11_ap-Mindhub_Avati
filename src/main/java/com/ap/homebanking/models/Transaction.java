@@ -72,9 +72,9 @@ public class Transaction {
         return date;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
+//    public void setDate(LocalDate date) {
+//        this.date = date;
+//    }
 
     public TransactionType getType() {
         return type;
