@@ -46,9 +46,12 @@ public class LoanApplicationController {
         String email = authentication.getName();
         Client client = clientService.findByEmail(email);
 
+        if (loanApplicationDTO == null) {
+            return new ResponseEntity<>("Missing or invalid data", HttpStatus.FORBIDDEN);
+        }
 
         if (loanApplicationDTO.getMaxAmount() <= 0 || loanApplicationDTO.getPayments() <= 0) {
-            return new ResponseEntity<>("Incorrect data", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Incorrect data", HttpStatus.FORBIDDEN);
         }
 
         // Verificar que el préstamo exista
@@ -59,7 +62,7 @@ public class LoanApplicationController {
 
 
         if (loanApplicationDTO.getMaxAmount() > loan.getMaxAmount()) {
-            return new ResponseEntity<>("Try with a less amount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Try with a less amount", HttpStatus.FORBIDDEN);
         }
 
 
