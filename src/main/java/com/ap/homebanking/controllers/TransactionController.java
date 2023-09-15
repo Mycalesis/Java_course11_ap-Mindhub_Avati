@@ -1,9 +1,6 @@
 package com.ap.homebanking.controllers;
 import com.ap.homebanking.dtos.TransactionDTO;
-import com.ap.homebanking.models.Account;
-import com.ap.homebanking.models.Client;
-import com.ap.homebanking.models.Transaction;
-import com.ap.homebanking.models.TransactionType;
+import com.ap.homebanking.models.*;
 import com.ap.homebanking.services.AccountService;
 import com.ap.homebanking.services.ClientService;
 import com.ap.homebanking.services.TransactionService;
@@ -69,13 +66,13 @@ public class TransactionController {
         if (fromAccountNumber.equals(toAccountNumber)) {
             return new ResponseEntity<>("Source and destination accounts must be different", HttpStatus.FORBIDDEN);
         }
-
-        Transaction debitTransaction = new Transaction(amount,"Transaction to " + toAccountNumber + " : " + description, LocalDate.now(), TransactionType.DEBIT);
-        Transaction creditTransaction = new Transaction(amount, "Transaction from"+ fromAccountNumber + " : " + description, LocalDate.now(), TransactionType.CREDIT);
+        System.out.println(clientAccounts.getBalance());
+        Transaction debitTransaction = new Transaction(amount,"Transaction to " + toAccountNumber + " : " + description, LocalDate.now(), TransactionType.DEBIT, clientAccounts.getBalance() - amount, Status.ACTIVE );
+        Transaction creditTransaction = new Transaction(amount, "Transaction from"+ fromAccountNumber + " : " + description, LocalDate.now(), TransactionType.CREDIT,clientAccounts.getBalance() + amount, Status.ACTIVE);
 
         clientAccounts.addTransaction(debitTransaction);
         clientAccountsTo.addTransaction(creditTransaction);
-
+        System.out.println(clientAccounts.getBalance());
         clientAccounts.setBalance(clientAccounts.getBalance() - amount);
         clientAccountsTo.setBalance(clientAccountsTo.getBalance() + amount);
 

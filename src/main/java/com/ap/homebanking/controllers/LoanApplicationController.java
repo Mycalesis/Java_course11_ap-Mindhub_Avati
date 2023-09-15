@@ -89,7 +89,7 @@ public class LoanApplicationController {
         transaction.setAmount(loanApplicationDTO.getMaxAmount());
         transaction.setType(TransactionType.CREDIT);
         transaction.setDescription(loan.getName() + " loan approved");
-
+        transaction.setTotal(accountToNumber.getBalance() + loanApplicationDTO.getMaxAmount());
         transactionService.savedTransactions(transaction);
 
 

@@ -20,6 +20,10 @@ public class Transaction {
 
     private TransactionType type;
 
+    private double total;
+
+    private Status status;
+
 
     //Un cliente puede realizar muchas transancciones desde una cuenta pero una transaccion no puede tener muchas cuentas
 
@@ -33,16 +37,26 @@ public class Transaction {
 
     //constructor
 
-    public Transaction (double amount, String description, LocalDate date, TransactionType type){
+    public Transaction (double amount, String description, LocalDate date, TransactionType type, double total, Status status){
         this.amount = amount;
         this.description = description;
         this.date = date;
         this.type = type;
+        this.total = total;
+        this.status = status;
 
     }
 
     //getters and setters
 
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
 
     public long getId() {
         return id;
@@ -90,5 +104,13 @@ public class Transaction {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

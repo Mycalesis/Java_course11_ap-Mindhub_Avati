@@ -23,6 +23,8 @@ public class Account {
 
     private LocalDate creationDate;
 
+    private Status status;
+
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
@@ -33,11 +35,12 @@ public class Account {
     public Account() {
     }
 
-    public Account(String number, double balance, Client client, LocalDate creationDate) {
+    public Account(String number, double balance, Client client, LocalDate creationDate, Status status) {
         this.number = number;
         this.balance = balance;
         this.client = client;
         this.creationDate = creationDate;
+        this.status = status;
     }
 
     public long getId() {
@@ -87,5 +90,13 @@ public class Account {
 
     public Set<Transaction> getTransactions() {
         return transactions;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

@@ -12,6 +12,7 @@ Vue.createApp({
                 .then((response) => {
                     //get client ifo
                     this.clientInfo = response.data;
+                    this.activeAccounts = this.clientInfo.accounts.filter(accounts => (accounts.status == "ACTIVE"));
                 })
                 .catch((error) => {
                     // handle error
@@ -23,13 +24,14 @@ Vue.createApp({
             return new Date(date).toLocaleDateString('en-gb');
         },
         signOut: function () {
-            axios.post('/api/logout')
-                .then(response => window.location.href = "/web/index.html")
-                .catch(() => {
-                    this.errorMsg = "Sign out failed"
-                    this.errorToats.show();
-                })
-        },
+                    axios.post('/api/logout')
+                        .then(response => window.location.href = "/web/index.html")
+                        .catch(() => {
+
+                            this.errorMsg = "Sign out failed"
+                            this.errorToats.show();
+                        })
+                },
         create: function () {
             axios.post('/api/clients/current/accounts')
                 .then(response => window.location.reload())

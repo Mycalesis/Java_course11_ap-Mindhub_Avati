@@ -2,6 +2,7 @@ package com.ap.homebanking.controllers;
 import com.ap.homebanking.dtos.ClientDTO;
 import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
+import com.ap.homebanking.models.Status;
 import com.ap.homebanking.services.AccountService;
 import com.ap.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,7 @@ public class ClientController {
         int randomNumber = random.nextInt(99999999) + 1;
         String accountNumber = prefix + randomNumber;
 
-        Account newAccount = new Account(accountNumber, 0, savedClient, LocalDate.now());
+        Account newAccount = new Account(accountNumber, 0, savedClient, LocalDate.now(), Status.ACTIVE);
         accountService.saveAccounts(newAccount);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

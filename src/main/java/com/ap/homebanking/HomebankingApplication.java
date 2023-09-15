@@ -41,32 +41,32 @@ public class HomebankingApplication {
 			LocalDate today = LocalDate.now();
 			LocalDate tomorrow = today.plusDays(1);
 			//clients acc
-			Account account1 = new Account("VIN-00000001", 5000, melba, LocalDate.now());
-			Account account2 = new Account("VIN-00000002", 7500, melba, LocalDate.now());
+			Account account1 = new Account("VIN-00000001", 5000, melba, LocalDate.now(),Status.ACTIVE);
+			Account account2 = new Account("VIN-00000002", 7500, melba, LocalDate.now(),Status.INACTIVE);
 			accountRepository.save(account1);
 			accountRepository.save(account2);
 
 
 			///MELBA'S TRANSACTIONS
 
-			Transaction transaction1 = new Transaction(-2000, "Compra en farmacia null", LocalDate.now(), TransactionType.DEBIT);
+			Transaction transaction1 = new Transaction(-2000, "Compra en farmacia null", LocalDate.now(), TransactionType.DEBIT, account1.getBalance() - 2000, Status.ACTIVE);
 			account1.addTransaction(transaction1);
 			transactionRepository.save(transaction1); // Guardar la transacción en la base de datos
 
-			Transaction transaction2 = new Transaction(-2000, "Compra en Supermercado Chun li", LocalDate.now(), TransactionType.DEBIT);
+			Transaction transaction2 = new Transaction(-2000, "Compra en Supermercado Chun li", LocalDate.now(), TransactionType.DEBIT, account1.getBalance()-2000,Status.ACTIVE);
 			account1.addTransaction(transaction2);
 			transactionRepository.save(transaction2);
 
-			Transaction transaction3 = new Transaction(500, "Devolucion en Supermercado Chun li", LocalDate.now(), TransactionType.CREDIT);
+			Transaction transaction3 = new Transaction(500, "Devolucion en Supermercado Chun li", LocalDate.now(), TransactionType.CREDIT, account1.getBalance()+500, Status.INACTIVE);
 			account1.addTransaction(transaction3);
 			transactionRepository.save(transaction3);
 
 
-			Transaction transaction4 = new Transaction(35000, "Devolución en farmacia", LocalDate.now(), TransactionType.CREDIT);
+			Transaction transaction4 = new Transaction(35000, "Devolución en farmacia", LocalDate.now(), TransactionType.CREDIT, account2.getBalance()+35000, Status.ACTIVE);
 			account2.addTransaction(transaction4);
 			transactionRepository.save(transaction4);
 
-			Transaction transaction5 = new Transaction(-250, "Pago en Kiosko Mappi", LocalDate.now(), TransactionType.DEBIT);
+			Transaction transaction5 = new Transaction(-250, "Pago en Kiosko Mappi", LocalDate.now(), TransactionType.DEBIT, account2.getBalance()-250,Status.ACTIVE);
 			account2.addTransaction(transaction5);
 			transactionRepository.save(transaction5);
 
@@ -110,26 +110,26 @@ public class HomebankingApplication {
 			Client anotherClient = new Client("Merengada", "Vainilla", "mere.vai@example.com", passwordEncoder.encode("vainillasky"), "CLIENT");
 			clientRepository.save(anotherClient);
 
-			Account anotherAccount1 = new Account("VIN-00000003", 10000, anotherClient, LocalDate.now());
-			Account anotherAccount2 = new Account("VIN-00000004", 20000, anotherClient,LocalDate.now());
+			Account anotherAccount1 = new Account("VIN-00000003", 10000, anotherClient, LocalDate.now(),Status.ACTIVE);
+			Account anotherAccount2 = new Account("VIN-00000004", 20000, anotherClient,LocalDate.now(),Status.ACTIVE);
 			accountRepository.save(anotherAccount1);
 			accountRepository.save(anotherAccount2);
 
 			//MERENGADA'S TRANSACTIONS
 
-			Transaction transaction01 = new Transaction(300000, "Honorarios", LocalDate.now(), TransactionType.CREDIT);
+			Transaction transaction01 = new Transaction(300000, "Honorarios", LocalDate.now(), TransactionType.CREDIT,anotherAccount1.getBalance()+300000, Status.ACTIVE);
 			anotherAccount1.addTransaction(transaction01);
 			transactionRepository.save(transaction01);
 
-			Transaction transaction02 = new Transaction(15000, "arba", LocalDate.now(), TransactionType.DEBIT);
+			Transaction transaction02 = new Transaction(15000, "arba", LocalDate.now(), TransactionType.DEBIT,anotherAccount1.getBalance()-15000, Status.ACTIVE);
 			anotherAccount1.addTransaction(transaction02);
 			transactionRepository.save(transaction02);
 
-			Transaction transaction03 = new Transaction(-6000, "EDENOR", LocalDate.now(), TransactionType.DEBIT);
+			Transaction transaction03 = new Transaction(-6000, "EDENOR", LocalDate.now(), TransactionType.DEBIT,anotherAccount2.getBalance()-6000, Status.ACTIVE);
 			anotherAccount2.addTransaction(transaction03);
 			transactionRepository.save(transaction03);
 
-			Transaction transaction04 = new Transaction(600, "Reintegro", LocalDate.now(), TransactionType.CREDIT);
+			Transaction transaction04 = new Transaction(600, "Reintegro", LocalDate.now(), TransactionType.CREDIT,anotherAccount2.getBalance()+600, Status.ACTIVE);
 			anotherAccount2.addTransaction(transaction04);
 			transactionRepository.save(transaction04);
 

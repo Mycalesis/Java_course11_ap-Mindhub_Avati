@@ -1,6 +1,7 @@
 package com.ap.homebanking.dtos;
 
 import com.ap.homebanking.models.Account;
+import com.ap.homebanking.models.Status;
 import com.ap.homebanking.models.Transaction;
 
 import java.time.LocalDate;
@@ -17,12 +18,15 @@ public class AccountDTO {
     private LocalDate creationDate;
     private List<TransactionDTO> transactions;
 
+    private Status status;
+
     public AccountDTO(Account account) {
         this.number = account.getNumber();
         this.balance = account.getBalance();
         this.id = account.getId();
         this.creationDate = account.getCreationDate();
         this.transactions = new ArrayList<>(); // Inicializa la lista
+        this.status = account.getStatus();
     }
 
     public AccountDTO(Account account, Set<Transaction> transactions) {
@@ -57,5 +61,7 @@ public class AccountDTO {
         return transactions;
     }
 
-
+    public Status getStatus() {
+        return status;
+    }
 }
